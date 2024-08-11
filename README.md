@@ -22,7 +22,7 @@ rye install commitizen --extra-requirement commitizen-wails
 
 ## Configuration
 
-Example for `.cz.yaml`
+Example for `.cz.toml`
 
 ```toml
 [tool.commitizen]
