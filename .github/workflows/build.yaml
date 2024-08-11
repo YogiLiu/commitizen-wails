@@ -12,9 +12,8 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.12"
-    - name: Install rye
-      shell: bash
-      run: curl -sSf https://rye.astral.sh/get | bash
+    - name: Install the latest version of rye
+      uses: eifinger/setup-rye@v4
     - name: Install dependencies
       shell: bash
       run: rye build -c
