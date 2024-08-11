@@ -24,7 +24,7 @@ jobs:
       shell: bash
       run: rye build -c
     - name: Store the distribution packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: commitizen-wails
         path: dist/*
