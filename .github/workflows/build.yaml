@@ -1,0 +1,51 @@
+name: Build and Publish
+
+on: push
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install rye
+      shell: bash
+      run: curl -sSf https://rye.astral.sh/get | bash
+    - name: Install dependencies
+      shell: bash
+      run: rye build -c
+    - name: Test
+      shell: bash
+      run: rye test
+    - name: Build a binary wheel and a source tarball
+      shell: bash
+      run: rye build -c
+    - name: Store the distribution packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: commitizen-wails
+        path: dist/*
+
+  publish:
+    name: Publish
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+    - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/commitizen-wails
+    permissions:
+      id-token: write
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v3
+      with:
+        name: commitizen-wails
+        path: dist/
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
